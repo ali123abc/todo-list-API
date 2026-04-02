@@ -1,7 +1,7 @@
 
 from app.models.task import Task
-
-
+from sqlalchemy.orm import Session
+from app.schemas.task import TaskCreate, TaskUpdate
 
 def create_task(db: Session, task_data: TaskCreate) -> Task:
     new_task = Task(**task_data.model_dump())
