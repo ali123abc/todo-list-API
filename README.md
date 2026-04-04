@@ -120,7 +120,7 @@ The API will be available at:
 ---
 ## Running with Docker
 
-Ensure docker is installed and running
+Ensure Docker is installed and running
 
 1. Build the image
 
