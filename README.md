@@ -48,7 +48,7 @@ A simple RESTful **Todo List API** built with **FastAPI**, **SQLAlchemy**, and *
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/ali123abc/todo-list-API.git
 cd todo-api
 ```
 
@@ -137,5 +137,5 @@ Each task includes:
 
 ## License
 
-This project is open for learning and personal use. You can add a license here if you plan to publish it.
+This project is open for learning and personal use.
 
