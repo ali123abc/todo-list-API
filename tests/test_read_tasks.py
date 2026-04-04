@@ -24,7 +24,7 @@ class TestGetAllTasks:
 class TestGetTaskById:
     # Test get task by ID endpoint
     def test_get_task_by_id(self, client, create_task):
-        task = create_task()#
+        task = create_task()
         task_data = task.json()
         task_id = task_data["id"]
         response = client.get(f"/tasks/{task_id}")
