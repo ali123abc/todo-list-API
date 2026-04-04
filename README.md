@@ -1,7 +1,6 @@
 # Todo API
 
-A simple RESTful **Todo List API** built with **FastAPI**, **SQLAlchemy**, and **SQLite**. It supports creating, reading, updating, and deleting tasks, and includes a small pytest suite for endpoint testing.
-
+A RESTful Todo List API built with FastAPI, featuring a clean layered architecture, full CRUD functionality, and a comprehensive pytest suite.
 ---
 
 ## Features
@@ -14,6 +13,30 @@ A simple RESTful **Todo List API** built with **FastAPI**, **SQLAlchemy**, and *
 - Health check endpoint
 - SQLite database by default
 - Test suite with isolated test database override
+
+--- 
+
+## Architecture
+
+The project follows a clean, layered architecture:
+
+- **Routes**: Handle HTTP requests and responses
+- **Services**: Contain business logic
+- **Models**: Define database structure using SQLAlchemy
+- **Schemas**: Handle request/response validation using Pydantic
+- **DB**: Manages database connection and session lifecycle
+
+---
+
+## Tech Stack
+
+- **Python** 
+- **FastAPI** 
+- **SQLAlchemy** 
+- **SQLite** 
+- **Pydantic** 
+- **Pytest** 
+- **Docker** 
 
 ---
 
@@ -35,7 +58,11 @@ A simple RESTful **Todo List API** built with **FastAPI**, **SQLAlchemy**, and *
 │   └── services/
 │       └── task_service.py  # Business logic
 ├── tests/
-│   └── test_tasks.py        # API tests
+│   ├── conftest.py          # Shared pytest fixtures and test DB override
+│   ├── test_create_tasks.py # Create task endpoint tests
+│   ├── test_read_tasks.py   # Read task endpoint tests
+│   ├── test_update_tasks.py # Update task endpoint tests
+│   └── test_delete_tasks.py # Delete task endpoint tests
 ├── requirements.txt
 ├── pytest.ini
 └── README.md
@@ -76,7 +103,7 @@ pip install -r requirements.txt
 
 ---
 
-##  Run the API
+## Run the API
 
 Start the development server with:
 
@@ -89,6 +116,48 @@ The API will be available at:
 - `http://127.0.0.1:8000`
 - Swagger docs: `http://127.0.0.1:8000/docs`
 - ReDoc docs: `http://127.0.0.1:8000/redoc`
+
+---
+## Running with Docker
+
+Ensure docker is installed and running
+
+1. Build the image
+
+```bash
+docker build -t todo-api .
+```
+2. Run the container
+
+```bash
+docker run -p 8000:8000 todo-api
+```
+
+3. Access the API
+
+http://localhost:8000/docs
+
+If using environment variables use
+
+```bash
+docker run -p 8000:8000 -e DATABASE_URL=sqlite:///./todo.db todo-api 
+```
+---
+
+## Run Tests
+The test suite covers CRUD operations, validation, and edge cases using an isolated test database.
+
+Run the test suite with:
+
+```bash
+pytest
+```
+
+To run a specific test file:
+
+```bash
+pytest tests/test_create_tasks.py
+```
 
 ---
 
@@ -106,7 +175,7 @@ You can override this with an environment variable:
 $env:DATABASE_URL="sqlite:///./todo.db"
 ```
 
-For tests, the project uses a separate SQLite database override in `tests/test_tasks.py`.
+For tests, the project uses a separate SQLite database override in `tests/conftest.py`.
 
 ---
 
