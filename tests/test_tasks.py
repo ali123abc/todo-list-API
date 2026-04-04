@@ -15,7 +15,6 @@ def create_task(client, title="Test Task", description="Test Description"):
         "description": description
     })
 
-
 # Generic health check test
 def test_health_check(client):
     response = client.get("/health")
@@ -24,10 +23,7 @@ def test_health_check(client):
 
 # Test create task endpoint
 def test_create_task(client):
-    response = client.post("/tasks", json={
-        "title": "Test",
-        "description": "Test desc"
-    })
+    response = create_task(client)
     assert response.status_code == 200
     assert "id" in response.json()
 
