@@ -45,4 +45,4 @@ def delete_task_endpoint(task_id: int, db: Session = Depends(get_db)):
     if not task:
         logger.warning("Task with id: %s not found for deletion", task_id)
         raise HTTPException(status_code=404, detail="Task not found")
-    return task
+    return None

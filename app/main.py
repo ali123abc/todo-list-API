@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from app.routes.task import router as task_router
-from contextlib import asynccontextmanager
 import logging
 
 logging.basicConfig(level=logging.INFO)

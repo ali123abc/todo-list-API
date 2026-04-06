@@ -12,7 +12,8 @@ A RESTful Todo List API built with FastAPI, featuring a clean layered architectu
 - Delete tasks
 - Health check endpoint
 - SQLite database by default
-- Test suite with isolated test database override
+- Alembic migrations for schema management
+- Test suite with database override and schema setup
 
 --- 
 
@@ -34,6 +35,7 @@ The project follows a clean, layered architecture:
 - **FastAPI** 
 - **SQLAlchemy** 
 - **SQLite** 
+- **Alembic** 
 - **Pydantic** 
 - **Pytest** 
 - **Docker** 
@@ -44,6 +46,7 @@ The project follows a clean, layered architecture:
 
 ```text
 .
+├── alembic/                # Alembic migration files
 ├── app/
 │   ├── main.py              # FastAPI app entry point
 │   ├── db/
@@ -58,11 +61,13 @@ The project follows a clean, layered architecture:
 │   └── services/
 │       └── task_service.py  # Business logic
 ├── tests/
-│   ├── conftest.py          # Shared pytest fixtures and test DB override
+│   ├── conftest.py          # Shared pytest fixtures and DB override
 │   ├── test_create_tasks.py # Create task endpoint tests
 │   ├── test_read_tasks.py   # Read task endpoint tests
 │   ├── test_update_tasks.py # Update task endpoint tests
 │   └── test_delete_tasks.py # Delete task endpoint tests
+├── alembic.ini
+├── docker-entrypoint.sh
 ├── requirements.txt
 ├── pytest.ini
 └── README.md
@@ -105,9 +110,10 @@ pip install -r requirements.txt
 
 ## Run the API
 
-Start the development server with:
+Apply the database migrations, then start the development server:
 
 ```bash
+alembic upgrade head
 uvicorn app.main:app --reload
 ```
 
@@ -132,6 +138,8 @@ docker build -t todo-api .
 ```bash
 docker run -p 8000:8000 todo-api
 ```
+
+The container startup script runs `alembic upgrade head` automatically before starting the API.
 
 3. Access the API
 
@@ -175,7 +183,7 @@ You can override this with an environment variable:
 $env:DATABASE_URL="sqlite:///./todo.db"
 ```
 
-For tests, the project uses a separate SQLite database override in `tests/conftest.py`.
+For tests, the project overrides the DB dependency and creates the schema in `tests/conftest.py`.
 
 ---
 
