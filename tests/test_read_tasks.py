@@ -21,6 +21,31 @@ class TestGetAllTasks:
         assert isinstance(data, list)
         assert len(data) == 0    
 
+    # Test get all tasks with pagination
+    def test_get_all_tasks_pagination(self, client, create_task):
+        for i in range(15):
+            create_task()
+        
+        response = client.get("/tasks?skip=5&limit=5")
+        assert response.status_code == status.HTTP_200_OK
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) == 5
+    
+    # Test get all tasks with invalid pagination parameters
+    def test_get_all_tasks_invalid_pagination(self, client):
+        response = client.get("/tasks?skip=-1&limit=5")
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+        response = client.get("/tasks?skip=0&limit=0")
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+    # Test that the list endpoint rejects limits above the max page size
+    def test_get_all_tasks_limit_above_max(self, client):
+        response = client.get("/tasks?skip=0&limit=101")
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
 class TestGetTaskById:
     # Test get task by ID endpoint
     def test_get_task_by_id(self, client, create_task):

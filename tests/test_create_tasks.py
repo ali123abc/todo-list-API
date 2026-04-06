@@ -5,7 +5,7 @@ class TestCreateTask:
     # Test create task endpoint
     def test_create_task(self, create_task):
         response = create_task()
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_201_CREATED
         json = response.json()
         assert "id" in json
         assert isinstance(json["id"], int)  
@@ -16,7 +16,7 @@ class TestCreateTask:
             "title": "Custom Title",
             "description": "Custom Description"
         })
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_201_CREATED
         json = response.json()
         assert json["title"] == "Custom Title"
         assert json["description"] == "Custom Description"
