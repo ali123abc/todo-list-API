@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
+import logging
 from app.schemas.task import TaskCreate, TaskUpdate, TaskResponse
 from app.services.task_service import (create_task as create_task_service, 
                                         get_task as get_task_service,
                                         list_tasks as list_tasks_service,
                                         update_task as update_task_service,
                                         delete_task as delete_task_service)
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
@@ -18,6 +21,7 @@ def create_task_endpoint(task: TaskCreate, db: Session = Depends(get_db)):
 def get_task_endpoint(task_id: int, db: Session = Depends(get_db)):
     task = get_task_service(db, task_id)
     if not task:
+        logger.warning("Task with id: %s not found", task_id)
         raise HTTPException(status_code=404, detail="Task not found")
     return task
 
@@ -31,6 +35,7 @@ def list_tasks_endpoint(skip: int= Query(0, ge=0),
 def update_task_endpoint(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_db)):
     task = update_task_service(db, task_id, task_data)
     if not task:
+        logger.warning("Task with id: %s not found for update", task_id)
         raise HTTPException(status_code=404, detail="Task not found")
     return task
 
@@ -38,5 +43,6 @@ def update_task_endpoint(task_id: int, task_data: TaskUpdate, db: Session = Depe
 def delete_task_endpoint(task_id: int, db: Session = Depends(get_db)):
     task = delete_task_service(db, task_id)
     if not task:
+        logger.warning("Task with id: %s not found for deletion", task_id)
         raise HTTPException(status_code=404, detail="Task not found")
     return task
