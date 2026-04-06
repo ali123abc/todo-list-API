@@ -4,6 +4,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN adduser --disabled-password --gecos "" appuser && chown -R appuser /app
+RUN chmod +x /app/docker-entrypoint.sh && adduser --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/docker-entrypoint.sh"]
