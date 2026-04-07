@@ -26,8 +26,8 @@ def get_task_endpoint(task_id: int, db: Session = Depends(get_db)):
     return task
 
 @router.get("/", response_model=list[TaskResponse])
-def list_tasks_endpoint(skip: int= Query(0, ge=0),
-                        limit: int= Query(10, ge=1, le=100),
+def list_tasks_endpoint(skip: int = Query(0, ge=0),
+                        limit: int = Query(10, ge=1, le=100),
                         db: Session = Depends(get_db)):
     return list_tasks_service(db, skip=skip, limit=limit)
 
