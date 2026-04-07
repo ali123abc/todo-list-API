@@ -81,7 +81,7 @@ The project follows a clean, layered architecture:
 
 ```bash
 git clone https://github.com/ali123abc/todo-list-API.git
-cd todo-api
+cd todo-list-API
 ```
 
 ### 2. Create and activate a virtual environment
@@ -126,7 +126,7 @@ The API will be available at:
 ---
 ## Running with Docker
 
-Ensure Docker is installed and running
+Ensure Docker is installed and running.
 
 1. Build the image
 

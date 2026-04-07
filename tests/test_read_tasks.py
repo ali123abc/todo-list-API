@@ -10,7 +10,7 @@ class TestGetAllTasks:
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert isinstance(data, list)
-        assert(len(data) == 1)
+        assert len(data) == 1
 
     # Test get all tasks with no tasks
     def test_get_all_tasks_empty(self, client):

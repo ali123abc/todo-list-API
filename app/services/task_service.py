@@ -1,14 +1,19 @@
-
-from app.models.task import Task
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from app.schemas.task import TaskCreate, TaskUpdate
+from app.models.task import Task
 import logging
-
 
 logger = logging.getLogger(__name__)
 
 def create_task(db: Session, task_data: TaskCreate) -> Task:
+    '''Creates a new task in the database.
+        Args:        
+            db: Database session
+            task_data: TaskCreate schema with task details
+        Returns:
+            The created Task object if successful, otherwise raises an exception.
+    '''
     new_task = Task(**task_data.model_dump())
     logger.info("Creating task with title: %s", new_task.title)
     try:
@@ -20,17 +25,40 @@ def create_task(db: Session, task_data: TaskCreate) -> Task:
         logger.exception("Error creating task with title: %s", new_task.title)
         db.rollback()
         raise
-    return new_task 
+    return new_task
 
 def get_task(db: Session, task_id: int) -> Task | None:
+    '''Retrieves a task by its ID.
+        Args:
+            db: Database session
+            task_id: ID of the task to retrieve
+        Returns:
+            The Task object if found, otherwise None.
+    '''
     logger.info("Retrieving task with id: %s", task_id)
     return db.query(Task).filter(Task.id == task_id).first()
 
 def list_tasks(db: Session, skip: int = 0, limit: int = 10) -> list[Task]:
+    '''Lists tasks with pagination.
+        Args:
+            db: Database session
+            skip: Number of tasks to skip
+            limit: Maximum number of tasks to return
+        Returns:
+            A list of Task objects
+    '''
     logger.info("Listing tasks with skip: %s and limit: %s", skip, limit)
     return db.query(Task).offset(skip).limit(limit).all()
 
 def update_task(db: Session, task_id: int, task_data: TaskUpdate) -> Task | None:
+    '''Updates an existing task.
+        Args:
+            db: Database session
+            task_id: ID of the task to update
+            task_data: TaskUpdate schema with updated task details
+        Returns:
+            The updated Task object if successful, otherwise None.
+    '''
     logger.info("Updating task with id: %s", task_id)
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
@@ -50,6 +78,13 @@ def update_task(db: Session, task_id: int, task_data: TaskUpdate) -> Task | None
     return task
 
 def delete_task(db: Session, task_id: int) -> bool:
+    '''Deletes a task by its ID.
+        Args:
+            db: Database session
+            task_id: ID of the task to delete
+        Returns:
+            True if the task was deleted successfully, otherwise False.
+    '''
     logger.info("Deleting task with id: %s", task_id)
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:

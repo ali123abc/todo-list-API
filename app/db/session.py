@@ -1,11 +1,11 @@
 import os
 from collections.abc import Generator
-
+from app.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 # Use SQLite by default; can be overridden via environment variable.
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./todo.db")
+DATABASE_URL = settings.DATABASE_URL
 
 engine = create_engine(
     DATABASE_URL,
